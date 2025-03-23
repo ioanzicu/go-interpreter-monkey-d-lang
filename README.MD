@@ -1,4 +1,4 @@
-# The Monkey D. Programming Language Interpreter
+# The MONKEY D. Programming Language Interpreter
 
 | Source Code | -> | Tokens | -> | Abstract Syntax Tree |
 
@@ -69,3 +69,60 @@
 - a string data structure
 - an array data structure
 - a hash data structure
+
+
+
+## Parsing
+
+- From root node to childern
+
+- "Top-down operator precedence" - recursive descent parser - "Pratt parser"
+
+ - [BNF for EcmaScript.jj](https://tomcopeland.blogs.com/EcmaScript.html#prod7)
+
+
+## Expressions In MONKEY D.
+
+- Everything besides `let` and `return` statements is an expression
+
+    - Prefix Operators
+        - `-5`
+        - `!true`
+        - `!false`
+
+    - Infix operators or "binary operators"
+        - `5 + 5`
+        - `5 - 5`
+        - `5 / 5`
+        - `5 * 5`
+    
+    - Comparison Operators
+        - `foo == bar`
+        - `foo != bar`
+        - `foo < bar`
+        - `foo > bar`
+
+    - Parentheses to group expressions and influence the order of evaluation
+        - `5 * (5 + 5)`
+        - `((5 + 5) * 5) * 5`
+    
+    - Call expressions
+        - `add(2, 3)`
+        - `add(add(2, 3), add(5, 10))`
+        - `max(5, add(5, (5 * 5)))`
+
+    - Identifiers expressions
+        - `foo * bar / foobar`
+        - `add(foo, bar)`
+
+    - Function literals are expressions
+        - `let add = fn(x, y) { return x + y };`
+    
+    - Function literal in place of an identifier
+        - `fn(x, y) { return x + y }(5, 5);`
+        - `(fn(x) { return x }(5) + 10) * 10;`
+    
+    - if expression
+        - `let result = if (10 > 5) { true } else { false };`
+        
+            `result // => true`
