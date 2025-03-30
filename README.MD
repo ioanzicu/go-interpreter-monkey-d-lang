@@ -126,3 +126,6 @@
         - `let result = if (10 > 5) { true } else { false };`
         
             `result // => true`
+
+    - Using function literal as an argument when calling another function
+        - `aFunc(x, y, fn(x, y) { return x > y; });`
