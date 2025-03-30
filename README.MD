@@ -129,3 +129,21 @@
 
     - Using function literal as an argument when calling another function
         - `aFunc(x, y, fn(x, y) { return x > y; });`
+
+# REPL
+ - Read
+ - Evaluate
+ - Print
+ - Loop
+
+    ```
+    go run main.go
+    Hello <user>! This is the Monkey programming language!
+    Feel free to type in commands
+    >> let a = 3 * 3 * 3;
+    let a = ((3 * 3) * 3);
+    >> x * y / 3 - 33 * 2 - 13
+    ((((x * y) / 3) - (33 * 2)) - 13)
+    >> false == true
+    (false == true)
+    ```
