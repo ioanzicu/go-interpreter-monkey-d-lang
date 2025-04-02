@@ -86,15 +86,15 @@
 - Everything besides `let` and `return` statements is an expression
 
     - Prefix Operators
-        - `-5`
+        - `-3`
         - `!true`
         - `!false`
 
     - Infix operators or "binary operators"
-        - `5 + 5`
-        - `5 - 5`
-        - `5 / 5`
-        - `5 * 5`
+        - `3 + 3`
+        - `3 - 3`
+        - `3 / 3`
+        - `3 * 3`
     
     - Comparison Operators
         - `foo == bar`
@@ -103,13 +103,13 @@
         - `foo > bar`
 
     - Parentheses to group expressions and influence the order of evaluation
-        - `5 * (5 + 5)`
-        - `((5 + 5) * 5) * 5`
+        - `3 * (3 + 3)`
+        - `((3 + 3) * 3) * 3`
     
     - Call expressions
         - `add(2, 3)`
-        - `add(add(2, 3), add(5, 10))`
-        - `max(5, add(5, (5 * 5)))`
+        - `add(add(2, 3), add(3, 10))`
+        - `max(3, add(3, (3 * 3)))`
 
     - Identifiers expressions
         - `foo * bar / foobar`
