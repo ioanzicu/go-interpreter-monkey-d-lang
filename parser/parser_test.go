@@ -12,7 +12,7 @@ func TestLetStatements(t *testing.T) {
 	tests := []struct {
 		input              string
 		expectedIdentifier string
-		expectedValue      interface{}
+		expectedValue      any
 	}{
 		{"let three = 3;", "three", 3},
 		{"let itIs = true;", "itIs", true},
@@ -175,7 +175,7 @@ func TestParsingPrefixExpressions(t *testing.T) {
 	prefixTests := []struct {
 		input        string
 		operator     string
-		integerValue interface{}
+		integerValue any
 	}{
 		{"!5", "!", 5},
 		{"-15;", "-", 15},
@@ -252,7 +252,7 @@ func testIdentifier(t *testing.T, exp ast.Expression, value string) bool {
 	return true
 }
 
-func testLiteralExpression(t *testing.T, exp ast.Expression, expected interface{}) bool {
+func testLiteralExpression(t *testing.T, exp ast.Expression, expected any) bool {
 	switch v := expected.(type) {
 	case int:
 		return testIntegerLiteral(t, exp, int64(v))
@@ -268,7 +268,7 @@ func testLiteralExpression(t *testing.T, exp ast.Expression, expected interface{
 	return false
 }
 
-func testInfixExpression(t *testing.T, exp ast.Expression, left interface{}, operator string, right interface{}) bool {
+func testInfixExpression(t *testing.T, exp ast.Expression, left any, operator string, right any) bool {
 	opExp, ok := exp.(*ast.InfixExpression)
 	if !ok {
 		t.Errorf("exp is not ast.OperatorExpression. got=%T(%s)", exp, exp)
@@ -314,9 +314,9 @@ func testBooleanLiteral(t *testing.T, exp ast.Expression, value bool) bool {
 func TestParsingInfixExpressions(t *testing.T) {
 	infixTests := []struct {
 		input      string
-		leftValue  interface{}
+		leftValue  any
 		operator   string
-		rightValue interface{}
+		rightValue any
 	}{
 		{"5 + 5;", 5, "+", 5},
 		{"5 - 5;", 5, "-", 5},
