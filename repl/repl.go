@@ -7,6 +7,7 @@ import (
 
 	"github.com/ioanzicu/monkeyd/evaluator"
 	"github.com/ioanzicu/monkeyd/lexer"
+	"github.com/ioanzicu/monkeyd/object"
 	"github.com/ioanzicu/monkeyd/parser"
 )
 
@@ -19,6 +20,7 @@ const PROMPT = ">> "
 
 func Start(in io.Reader, out io.Writer) {
 	scanner := bufio.NewScanner(in)
+	env := object.NewEnvironment()
 
 	// Read input from Terminal
 	for {
@@ -44,7 +46,7 @@ func Start(in io.Reader, out io.Writer) {
 			continue
 		}
 
-		evaluated := evaluator.Eval(program)
+		evaluated := evaluator.Eval(program, env)
 		if evaluated != nil {
 			io.WriteString(out, evaluated.Inspect())
 			io.WriteString(out, "\n")
