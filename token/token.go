@@ -30,6 +30,10 @@ const (
 	LBRACE = "{"
 	RBRACE = "}"
 
+	// Array
+	LBRACKET = "["
+	RBRACKET = "]"
+
 	// Keywords
 	FUNCTION = "FUNCTION"
 	LET      = "LET"
