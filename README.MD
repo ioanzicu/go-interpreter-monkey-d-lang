@@ -138,7 +138,7 @@
 
     ```
     go run main.go
-    Hello <user>! This is the Monkey programming language!
+    Hello <user>! This is the Monkey D.programming language!
     Feel free to type in commands
     >> let a = 3 * 3 * 3;
     let a = ((3 * 3) * 3);
@@ -212,3 +212,39 @@
     Glen
     >> getName(users[1]);
     Peter
+
+
+## Builtins:
+
+### len
+
+    >> len("abc")
+    3
+    >> len(["a", "b", "c"])
+    3
+
+### first
+
+    >> first(["a", "b", "c"])
+    a
+
+### last
+
+    >> last(["a", "b", "c"])
+    c
+
+### rest
+
+    >> rest(["a", "b", "c"])
+    [b, c]
+
+### push
+
+    >> push([], "a")
+    [a]
+
+### puts
+
+    >> puts("Hello Monkey D!");   
+    Hello Monkey D!
+    null
