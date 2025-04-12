@@ -192,11 +192,23 @@
     15
 
 
-
-
 ## Hashes
 
     >> {"name": "Monkey D.", "age": -1, "type": "Language", "status": "distinguished"}
     {age: -1, type: Language, status: distinguished, name: Monkey D.}
     >> let ioan = {"name": "Ioan", "age": 33};
-    
+
+
+
+    >> let users = [{"name": "Glen", "age": 34}, {"name": "Peter", "age": 29}];
+    >> users[0]["name"];
+    Glen
+    >> users[1]["name"];
+    Peter
+    >> users[1]["age"] + users[0]["age"];
+    63
+    >> let getName = fn(user) { user["name"]; };
+    >> getName(users[0]);
+    Glen
+    >> getName(users[1]);
+    Peter
