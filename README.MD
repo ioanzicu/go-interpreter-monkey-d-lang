@@ -190,3 +190,13 @@
 
     >> sum([1, 2, 3, 4, 5]);
     15
+
+
+
+
+## Hashes
+
+    >> {"name": "Monkey D.", "age": -1, "type": "Language", "status": "distinguished"}
+    {age: -1, type: Language, status: distinguished, name: Monkey D.}
+    >> let ioan = {"name": "Ioan", "age": 33};
+    

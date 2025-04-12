@@ -168,7 +168,7 @@ func (h *Hash) Inspect() string {
 
 	pairs := []string{}
 	for _, pair := range h.Pairs {
-		pairs = append(pairs, fmt.Sprintf("%s: %s", pair.Key.Inspect(), pair.Key.Inspect()))
+		pairs = append(pairs, fmt.Sprintf("%s: %s", pair.Key.Inspect(), pair.Value.Inspect()))
 	}
 
 	out.WriteString("{")
@@ -180,6 +180,6 @@ func (h *Hash) Inspect() string {
 
 // Hashable interface used to check if the given
 // object is usable as a hash key
-type Hahsable interface {
+type Hashable interface {
 	HashKey() HashKey
 }
