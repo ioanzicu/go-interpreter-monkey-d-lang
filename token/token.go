@@ -11,15 +11,17 @@ const (
 
 	// Operators
 	ASSIGN   = "="
-	EQ       = "=="
 	PLUS     = "+"
 	MINUS    = "-"
 	BANG     = "!"
-	NOT_EQ   = "!="
 	ASTERISK = "*"
 	SLASH    = "/"
-	LT       = "<"
-	GT       = ">"
+
+	LT = "<"
+	GT = ">"
+
+	EQ     = "=="
+	NOT_EQ = "!="
 
 	// Delimiters
 	COMMA     = ","
@@ -28,6 +30,8 @@ const (
 
 	LPAREN = "("
 	RPAREN = ")"
+
+	// Block
 	LBRACE = "{"
 	RBRACE = "}"
 
@@ -40,9 +44,9 @@ const (
 	LET      = "LET"
 	IF       = "IF"
 	ELSE     = "ELSE"
-	RETURN   = "RETURN"
 	TRUE     = "TRUE"
 	FALSE    = "FALSE"
+	RETURN   = "RETURN"
 )
 
 type TokenType string

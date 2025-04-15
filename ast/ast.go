@@ -8,16 +8,19 @@ import (
 	"github.com/ioanzicu/monkeyd/token"
 )
 
+// Node - The base Node interface
 type Node interface {
 	TokenLiteral() string
 	String() string
 }
 
+// Statement - implemented by all statement nodes
 type Statement interface {
 	Node
 	statementNode()
 }
 
+// Expression - implemented by all expression nodes
 type Expression interface {
 	Node
 	expressionNode()
@@ -45,6 +48,7 @@ func (p *Program) String() string {
 	return out.String()
 }
 
+// STATEMENTS
 type LetStatement struct {
 	Token token.Token // the token.LET token
 	Name  *Identifier
@@ -68,15 +72,6 @@ func (ls *LetStatement) String() string {
 
 	return out.String()
 }
-
-type Identifier struct {
-	Token token.Token // the token.IDENT token
-	Value string
-}
-
-func (i *Identifier) expressionNode()      {}
-func (i *Identifier) TokenLiteral() string { return i.Token.Literal }
-func (i *Identifier) String() string       { return i.Value }
 
 type ReturnStatement struct {
 	Token       token.Token // the `return` token
@@ -112,6 +107,42 @@ func (es *ExpressionStatement) String() string {
 	}
 	return ""
 }
+
+type BlockStatement struct {
+	Token      token.Token // the { token
+	Statements []Statement
+}
+
+func (bs *BlockStatement) statementNode()       {}
+func (bs *BlockStatement) TokenLiteral() string { return bs.Token.Literal }
+func (bs *BlockStatement) String() string {
+	var out bytes.Buffer
+
+	for _, s := range bs.Statements {
+		out.WriteString(s.String())
+	}
+
+	return out.String()
+}
+
+// EXPRESSIONS
+type Identifier struct {
+	Token token.Token // the token.IDENT token
+	Value string
+}
+
+func (i *Identifier) expressionNode()      {}
+func (i *Identifier) TokenLiteral() string { return i.Token.Literal }
+func (i *Identifier) String() string       { return i.Value }
+
+type Boolean struct {
+	Token token.Token
+	Value bool
+}
+
+func (b *Boolean) expressionNode()      {}
+func (b *Boolean) TokenLiteral() string { return b.Token.Literal }
+func (b *Boolean) String() string       { return b.Token.Literal }
 
 type IntegerLiteral struct {
 	Token token.Token
@@ -162,15 +193,6 @@ func (oe *InfixExpression) String() string {
 	return out.String()
 }
 
-type Boolean struct {
-	Token token.Token
-	Value bool
-}
-
-func (b *Boolean) expressionNode()      {}
-func (b *Boolean) TokenLiteral() string { return b.Token.Literal }
-func (b *Boolean) String() string       { return b.Token.Literal }
-
 // if (<condition>) <consequence> else <alternative>
 type IfExpression struct {
 	Token       token.Token // The 'if' token
@@ -192,23 +214,6 @@ func (ie *IfExpression) String() string {
 	if ie.Alternative != nil {
 		out.WriteString("else ")
 		out.WriteString(ie.Alternative.String())
-	}
-
-	return out.String()
-}
-
-type BlockStatement struct {
-	Token      token.Token // the { token
-	Statements []Statement
-}
-
-func (bs *BlockStatement) statementNode()       {}
-func (bs *BlockStatement) TokenLiteral() string { return bs.Token.Literal }
-func (bs *BlockStatement) String() string {
-	var out bytes.Buffer
-
-	for _, s := range bs.Statements {
-		out.WriteString(s.String())
 	}
 
 	return out.String()

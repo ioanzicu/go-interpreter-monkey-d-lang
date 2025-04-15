@@ -13,16 +13,20 @@ type ObjectType string
 type BuiltinFunction func(args ...Object) Object
 
 const (
-	INTEGER_OBJ      ObjectType = "INTEGER"
-	BOOLEAN_OBJ      ObjectType = "BOOLEAN"
-	NULL_OBJ         ObjectType = "NULL"
+	NULL_OBJ  ObjectType = "NULL"
+	ERROR_OBJ ObjectType = "ERROR"
+
+	INTEGER_OBJ ObjectType = "INTEGER"
+	BOOLEAN_OBJ ObjectType = "BOOLEAN"
+	STRING_OBJ  ObjectType = "STRING"
+
 	RETURN_VALUE_OBJ ObjectType = "RETURN_VALUE"
-	ERROR_OBJ        ObjectType = "ERROR"
-	FUNCTION_OBJ     ObjectType = "FUNCTION"
-	STRING_OBJ       ObjectType = "STRING"
-	BUILTIN_OBJ      ObjectType = "BUILTIN"
-	ARRAY_OBJ        ObjectType = "ARRAY"
-	HASH_OBJ         ObjectType = "HASH"
+
+	FUNCTION_OBJ ObjectType = "FUNCTION"
+	BUILTIN_OBJ  ObjectType = "BUILTIN"
+
+	ARRAY_OBJ ObjectType = "ARRAY"
+	HASH_OBJ  ObjectType = "HASH"
 )
 
 type Error struct {

@@ -19,61 +19,14 @@ func New(input string) *Lexer {
 	return l
 }
 
-func (l *Lexer) readChar() {
-	if l.readPosition >= len(l.input) {
-		l.ch = 0 // ASCII code for "NUL"
-	} else {
-		l.ch = l.input[l.readPosition]
-	}
-
-	// position is prev readPosition
-	l.position = l.readPosition
-	l.readPosition += 1
-}
-
-func (l *Lexer) readString() (string, error) {
-	// current position on '"'
-	position := l.position + 1
-
-	// keep reading till '"'
-	for {
-		l.readChar()
-
-		if l.ch == 0 || l.ch == '\n' {
-			return "", errors.New("string literal not terminated")
-		}
-
-		if l.ch == '"' {
-			break
-		}
-
-		// escape '"'
-	}
-
-	return l.input[position:l.position], nil
-}
-func (l *Lexer) peakChar() byte {
-	if l.readPosition >= len(l.input) {
-		return 0
-	}
-
-	return l.input[l.readPosition]
-}
-
-func (l *Lexer) skipWhitespace() {
-	for l.ch == ' ' || l.ch == '\t' || l.ch == '\n' || l.ch == '\r' {
-		l.readChar()
-	}
-}
-
 func (l *Lexer) NextToken() token.Token {
 	l.skipWhitespace()
 
 	var tok token.Token
+
 	switch l.ch {
 	case '=':
-		// ==
-		if l.peakChar() == '=' {
+		if l.peekChar() == '=' { // '=='
 			ch := l.ch
 			l.readChar()
 
@@ -82,13 +35,11 @@ func (l *Lexer) NextToken() token.Token {
 				Type:    token.EQ,
 				Literal: literal,
 			}
-		} else {
-			// =
+		} else { // '='
 			tok = newToken(token.ASSIGN, l.ch)
 		}
 	case '!':
-		// !=
-		if l.peakChar() == '=' {
+		if l.peekChar() == '=' { // '!='
 			ch := l.ch
 			l.readChar()
 
@@ -97,7 +48,7 @@ func (l *Lexer) NextToken() token.Token {
 				Type:    token.NOT_EQ,
 				Literal: literal,
 			}
-		} else {
+		} else { // '!'
 			tok = newToken(token.BANG, l.ch)
 		}
 	case '"':
@@ -143,20 +94,64 @@ func (l *Lexer) NextToken() token.Token {
 
 			// no need to readChar as readIdentifier reads past the identifier
 			return tok
-		}
-
-		if isDigit(l.ch) {
-			tok.Literal = l.readNumber()
+		} else if isDigit(l.ch) {
 			tok.Type = token.INT
-
+			tok.Literal = l.readNumber()
 			return tok
+		} else {
+			tok = newToken(token.ILLEGAL, l.ch)
 		}
-
-		tok = newToken(token.ILLEGAL, l.ch)
 	}
 
 	l.readChar()
 	return tok
+}
+
+func (l *Lexer) readChar() {
+	if l.readPosition >= len(l.input) {
+		l.ch = 0 // ASCII code for "NUL"
+	} else {
+		l.ch = l.input[l.readPosition]
+	}
+
+	// position is prev readPosition
+	l.position = l.readPosition
+	l.readPosition += 1
+}
+
+func (l *Lexer) readString() (string, error) {
+	// current position on '"'
+	position := l.position + 1
+
+	// keep reading till '"'
+	for {
+		l.readChar()
+
+		if l.ch == 0 || l.ch == '\n' {
+			return "", errors.New("string literal not terminated")
+		}
+
+		if l.ch == '"' {
+			break
+		}
+
+		// escape '"'
+	}
+
+	return l.input[position:l.position], nil
+}
+func (l *Lexer) peekChar() byte {
+	if l.readPosition >= len(l.input) {
+		return 0
+	}
+
+	return l.input[l.readPosition]
+}
+
+func (l *Lexer) skipWhitespace() {
+	for l.ch == ' ' || l.ch == '\t' || l.ch == '\n' || l.ch == '\r' {
+		l.readChar()
+	}
 }
 
 func (l *Lexer) readIdentifier() string {

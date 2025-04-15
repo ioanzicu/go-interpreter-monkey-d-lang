@@ -16,7 +16,7 @@ var (
 func Eval(node ast.Node, env *object.Environment) object.Object {
 	switch node := node.(type) {
 
-	// Statements
+	// STATEMENTS
 	case *ast.Program:
 		return evalProgram(node, env)
 
@@ -40,15 +40,15 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		}
 		env.Set(node.Name.Value, val)
 
-	case *ast.Identifier:
-		return evalIdentifier(node, env)
-
-	// Expressions
+	// EXPRESSIONS
 	case *ast.IntegerLiteral:
 		return &object.Integer{Value: node.Value}
 
 	case *ast.StringLiteral:
 		return &object.String{Value: node.Value}
+
+	case *ast.Boolean:
+		return nativeBoolToBooleanObject(node.Value)
 
 	case *ast.FunctionLiteral:
 		params := node.Parameters
@@ -78,9 +78,6 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 
 		return applyFunction(function, args)
 
-	case *ast.Boolean:
-		return nativeBoolToBooleanObject(node.Value)
-
 	case *ast.PrefixExpression:
 		right := Eval(node.Right, env)
 		if isError(right) {
@@ -104,6 +101,9 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 	case *ast.IfExpression:
 		return evalIfExpression(node, env)
 
+	case *ast.Identifier:
+		return evalIdentifier(node, env)
+
 	case *ast.IndexExpression:
 		left := Eval(node.Left, env) // array object
 		if isError(left) {
@@ -117,6 +117,23 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 	}
 
 	return nil
+}
+
+func evalProgram(program *ast.Program, env *object.Environment) object.Object {
+	var result object.Object
+
+	for _, statement := range program.Statements {
+		result = Eval(statement, env)
+
+		switch result := result.(type) {
+		case *object.ReturnValue:
+			return result.Value
+		case *object.Error:
+			return result
+		}
+	}
+
+	return result
 }
 
 func evalHashLiteral(node *ast.HashLiteral, env *object.Environment) object.Object {
@@ -244,23 +261,6 @@ func evalIdentifier(node *ast.Identifier, env *object.Environment) object.Object
 	return newError("%s", "identifier not found: "+node.Value)
 }
 
-func evalProgram(program *ast.Program, env *object.Environment) object.Object {
-	var result object.Object
-
-	for _, statement := range program.Statements {
-		result = Eval(statement, env)
-
-		switch result := result.(type) {
-		case *object.ReturnValue:
-			return result.Value
-		case *object.Error:
-			return result
-		}
-	}
-
-	return result
-}
-
 func evalBlockStatement(block *ast.BlockStatement, env *object.Environment) object.Object {
 	var result object.Object
 
@@ -322,14 +322,14 @@ func evalInfixExpression(operator string, left, right object.Object) object.Obje
 	switch {
 	case left.Type() == object.INTEGER_OBJ && right.Type() == object.INTEGER_OBJ:
 		return evalIntegerInfixExpression(operator, left, right)
+	case left.Type() == object.STRING_OBJ && right.Type() == object.STRING_OBJ:
+		return evalStringInfixExpression(operator, left, right)
 	case operator == "==":
 		return nativeBoolToBooleanObject(left == right)
 	case operator == "!=":
 		return nativeBoolToBooleanObject(left != right)
 	case left.Type() != right.Type():
 		return newError("type mismatch: %s %s %s", left.Type(), operator, right.Type())
-	case left.Type() == object.STRING_OBJ && right.Type() == object.STRING_OBJ:
-		return evalStringInfixExpression(operator, left, right)
 	default:
 		return newError("unknown operator: %s %s %s", left.Type(), operator, right.Type())
 	}
